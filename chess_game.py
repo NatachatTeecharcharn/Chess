@@ -49,13 +49,13 @@ class ChessBoard:
                 board[i2][j2] = board[i1][j1].copy()
                 board[i1][j1] = None
 
+    # print board on terminal
     def show(self):
-        output = [["." for j in range(8)] for i in range(8)]
+        output = [[".." for j in range(8)] for i in range(8)]
         for i in range(8):
             for j in range(8):
-                print(self.board[i][j])
                 if self.board[i][j]:
-                    output[i][j] = "P"
+                    output[i][j] = self.board[i][j].name()
         
         for row in output:
             print(" ".join(row))
@@ -68,6 +68,9 @@ class Piece:
         self.j = j
         self.color = color
 
+    def name(self):
+        return self.color[0] + "P"
+
     # piece has valid moves
     def get_valid_moves(self, board):
         return [(i, j) for i in range(8) for j in range(8)]
@@ -76,6 +79,9 @@ class Piece:
 class Queen(Piece):
     def __init__(self, i, j, color):
         super().__init__(i, j, color)
+
+    def name(self):
+        return self.color[0] + "Q"
 
     # the queen can move in straight lines and diagonals
     def get_valid_moves(self, board):
@@ -93,14 +99,14 @@ class Queen(Piece):
 
 if __name__ == "__main__":
     board = [
-        ["wQ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+        ["  ", "  ", "  ", "  ", "bK", "  ", "  ", "  "],
         ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
         ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
         ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
         ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
         ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
         ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
-        ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "]
+        ["  ", "  ", "  ", "wQ", "wK", "  ", "  ", "  "]
     ]
     chess_game = ChessGame(board)
     chess_game.play()
