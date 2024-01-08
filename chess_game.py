@@ -20,7 +20,7 @@ class ChessGame:
                 running = False
                 print("GOODBYE")
             elif command[0] == "move":
-                i1, j1, i2, j2 = command[1:5]
+                i1, j1, i2, j2 = map(int, command[1:5])
                 self.board.move((i1, j1), (i2, j2))
 
 
@@ -31,23 +31,30 @@ class ChessBoard:
     
     def _parse_board(self, board):
         new_board = [[None for j in range(8)] for i in range(8)]
+        pieces = {
+            "K": lambda i, j, color: King(i, j, color),
+            "Q": lambda i, j, color: Queen(i, j, color),
+        }
         for i in range(8):
             for j in range(8):
                 piece = board[i][j]
                 if piece != "  ":
-                    new_board[i][j] = Queen(i, j, "white")
+                    color = piece[0]
+                    piece_type = piece[1]
+                    new_board[i][j] = pieces[piece_type](i, j, color)
                 else:
                     new_board[i][j] = None
         return new_board
 
-    # move piece from one place to another
+    # move piece from one place to another, only if it is a valid move
     def move(self, ij1, ij2):
         i1, j1 = ij1
         i2, j2 = ij2
-        if board[i1][j1]:
-            if not board[i2][j2]:
-                board[i2][j2] = board[i1][j1].copy()
-                board[i1][j1] = None
+        if self.board[i1][j1]:
+            if (i2, j2) in self.board[i1][j1].get_valid_moves(self):
+                self.board[i2][j2] = self.board[i1][j1]
+                self.board[i1][j1] = None
+
 
     # print board on terminal
     def show(self):
@@ -72,8 +79,28 @@ class Piece:
         return self.color[0] + "P"
 
     # piece has valid moves
-    def get_valid_moves(self, board):
+    def get_valid_moves(self, chess_board):
         return [(i, j) for i in range(8) for j in range(8)]
+
+
+class King(Piece):
+    def __init__(self, i, j, color):
+        super().__init__(i, j, color)
+
+    def name(self):
+        return self.color[0] + "K"
+
+    # the king can move 1 step in any directions, but must not move to be checked
+    def get_valid_moves(self, chess_board):
+        valid_moves = []
+        for di in (-1, 0, 1):
+            for dj in (-1, 0, 1):
+                if (di, dj) == (0, 0):
+                    continue
+                i = self.i + di
+                j = self.j + dj
+                valid_moves.append((i, j))
+        return valid_moves
 
 
 class Queen(Piece):
@@ -83,8 +110,8 @@ class Queen(Piece):
     def name(self):
         return self.color[0] + "Q"
 
-    # the queen can move in straight lines and diagonals
-    def get_valid_moves(self, board):
+    # the queen can move in any directions
+    def get_valid_moves(self, chess_board):
         valid_moves = []
         for di in (-1, 0, 1):
             for dj in (-1, 0, 1):
