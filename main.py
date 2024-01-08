@@ -43,9 +43,15 @@ class ChessInterface:
             
             draw_square(self.screen, (250, 20, 20), (mouse_ij[1] * SQUARE_SIZE, mouse_ij[0] * SQUARE_SIZE))
 
+
+
             draw_pieces(self.images, self.screen, self.chess_game.chess_board)
 
             if self.is_selecting:
+                piece = self.chess_game.chess_board.board[self.selected_ij[0]][self.selected_ij[1]]
+                if piece:
+                    piece.draw_valid_moves(self.screen, self.chess_game.chess_board)
+
                 draw_square(self.screen, (250, 200, 50), (mouse_ij[1] * SQUARE_SIZE, mouse_ij[0] * SQUARE_SIZE))
 
                 if not left_pressed:

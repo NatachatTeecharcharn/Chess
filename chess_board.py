@@ -27,9 +27,11 @@ class ChessBoard:
     def move(self, ij1, ij2):
         i1, j1 = ij1
         i2, j2 = ij2
-        if self.board[i1][j1]:
-            if (i2, j2) in self.board[i1][j1].get_valid_moves(self):
-                self.board[i2][j2] = self.board[i1][j1]
+        piece = self.board[i1][j1]
+        if piece:
+            if (i2, j2) in piece.get_valid_moves(self):
+                piece.move((i2, j2))
+                self.board[i2][j2] = piece
                 self.board[i1][j1] = None
 
     # print board on terminal

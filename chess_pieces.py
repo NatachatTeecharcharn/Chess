@@ -1,3 +1,8 @@
+import pygame as pg
+
+from settings import *
+
+
 class Piece:
     # piece has pos and color
     def __init__(self, i, j, color):
@@ -15,6 +20,15 @@ class Piece:
     # if the pieces were to have feelings, they should be aware of when they would be captured
     def can_be_captured(self, chess_board):
         return False
+    
+    def draw_valid_moves(self, surf, chess_board):
+        circle_surf = pg.Surface((SQUARE_SIZE, SQUARE_SIZE), pg.SRCALPHA)
+        pg.draw.circle(circle_surf, (0, 0, 0, 150), (SQUARE_SIZE // 2, SQUARE_SIZE // 2), SQUARE_SIZE // 6)
+        for i, j in self.get_valid_moves(chess_board):
+            surf.blit(circle_surf, (j * SQUARE_SIZE, i * SQUARE_SIZE))
+
+    def move(self, ij2):
+        self.i, self.j = ij2
 
 
 class King(Piece):
