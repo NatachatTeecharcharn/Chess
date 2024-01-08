@@ -34,3 +34,8 @@ def draw_pieces(images, surf, chess_board):
                 x = j * SQUARE_SIZE
                 y = i * SQUARE_SIZE
                 surf.blit(image, (x, y))
+
+# draw hollow square
+def draw_square(surf, color, xy):
+    x, y = xy
+    pg.draw.rect(surf, color, (x, y, SQUARE_SIZE, SQUARE_SIZE), 3)

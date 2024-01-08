@@ -2,7 +2,7 @@ import pygame as pg
 import sys
 
 from settings import *
-from utils import load_images, create_board_surf, draw_pieces
+from utils import load_images, create_board_surf, draw_pieces, draw_square
 from chess_game import ChessGame
 
 
@@ -27,14 +27,32 @@ class ChessInterface:
         self.images = load_images()  # cache an image
         self.board_surf = create_board_surf()  # a background, should not be changed
 
+        self.is_selecting = False
+        self.selected_ij = (-1, -1)
+
     def run(self):
         while True:
             mouse_pos = pg.mouse.get_pos()
             mouse_pressed = pg.mouse.get_pressed()
             mouse_rel = pg.mouse.get_rel()
+            left_pressed = mouse_pressed[0]
 
             self.screen.blit(self.board_surf, (0, 0))
+            
+            draw_square(self.screen, (250, 20, 20), ((mouse_pos[0] // SQUARE_SIZE) * SQUARE_SIZE, (mouse_pos[1] // SQUARE_SIZE) * SQUARE_SIZE))
+
             draw_pieces(self.images, self.screen, self.chess_game.chess_board)
+
+            if self.is_selecting:
+                draw_square(self.screen, (250, 200, 50), (self.selected_ij[0] * SQUARE_SIZE, self.selected_ij[1] * SQUARE_SIZE))
+
+                if not left_pressed:
+                    self.is_selecting = False
+            else:
+                if left_pressed:
+                    self.selected_ij = (mouse_pos[0] // SQUARE_SIZE, mouse_pos[1] // SQUARE_SIZE)
+                    self.is_selecting = True
+    
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
