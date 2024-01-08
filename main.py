@@ -35,22 +35,26 @@ class ChessInterface:
             mouse_pos = pg.mouse.get_pos()
             mouse_pressed = pg.mouse.get_pressed()
             mouse_rel = pg.mouse.get_rel()
+            
             left_pressed = mouse_pressed[0]
+            mouse_ij = (mouse_pos[1] // SQUARE_SIZE, mouse_pos[0] // SQUARE_SIZE)
 
             self.screen.blit(self.board_surf, (0, 0))
             
-            draw_square(self.screen, (250, 20, 20), ((mouse_pos[0] // SQUARE_SIZE) * SQUARE_SIZE, (mouse_pos[1] // SQUARE_SIZE) * SQUARE_SIZE))
+            draw_square(self.screen, (250, 20, 20), (mouse_ij[1] * SQUARE_SIZE, mouse_ij[0] * SQUARE_SIZE))
 
             draw_pieces(self.images, self.screen, self.chess_game.chess_board)
 
             if self.is_selecting:
-                draw_square(self.screen, (250, 200, 50), (self.selected_ij[0] * SQUARE_SIZE, self.selected_ij[1] * SQUARE_SIZE))
+                draw_square(self.screen, (250, 200, 50), (mouse_ij[1] * SQUARE_SIZE, mouse_ij[0] * SQUARE_SIZE))
 
                 if not left_pressed:
+                    self.chess_game.move(self.selected_ij, mouse_ij)
+
                     self.is_selecting = False
             else:
                 if left_pressed:
-                    self.selected_ij = (mouse_pos[0] // SQUARE_SIZE, mouse_pos[1] // SQUARE_SIZE)
+                    self.selected_ij = mouse_ij
                     self.is_selecting = True
     
 
@@ -58,6 +62,11 @@ class ChessInterface:
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
+                elif event.type == pg.MOUSEBUTTONDOWN:
+                    if event.button == pg.BUTTON_RIGHT:
+                        print(self.selected_ij)
+                        self.chess_game.chess_board.show()
+                        print()
             
             pg.display.update()
             self.clock.tick(FPS)

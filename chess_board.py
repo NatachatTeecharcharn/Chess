@@ -32,7 +32,6 @@ class ChessBoard:
                 self.board[i2][j2] = self.board[i1][j1]
                 self.board[i1][j1] = None
 
-
     # print board on terminal
     def show(self):
         output = [[".." for j in range(8)] for i in range(8)]

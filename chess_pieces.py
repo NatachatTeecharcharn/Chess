@@ -55,4 +55,6 @@ class Queen(Piece):
                 j = self.j + dj
                 while 0 <= i <= 7 and 0 <= j <= 7:
                     valid_moves.append((i, j))
+                    i += di
+                    j += dj
         return valid_moves
