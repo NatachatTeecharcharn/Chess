@@ -11,6 +11,10 @@ class Piece:
     # piece has valid moves
     def get_valid_moves(self, chess_board):
         return [(i, j) for i in range(8) for j in range(8)]
+    
+    # if the pieces were to have feelings, they should be aware of when they would be captured
+    def can_be_captured(self, chess_board):
+        return False
 
 
 class King(Piece):

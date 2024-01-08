@@ -5,7 +5,7 @@ from chess_board import ChessBoard
 class ChessGame:
     def __init__(self, board):
         self.turn = 0  # 0 for white, 1 for black
-        self.board = ChessBoard(board)
+        self.chess_board = ChessBoard(board)
 
     # change turn
     def update_turn(self):
