@@ -51,13 +51,17 @@ class Piece(pg.sprite.Sprite):
         y = j * SQUARE_SIZE
         self.rect = pg.Rect(x, y, SQUARE_SIZE, SQUARE_SIZE)
 
-    def is_selecting(self, mouse_pos, mouse_pressed):  # True if is being left-clicked on
+        self.is_focus = False
+
+    def is_selecting(self, mouse_pos, mouse_pressed):  # True if is being left-clicked on, until dropping
         is_mouse_hovering = self.rect.collidepoint(mouse_pos)
         is_mouse_left_click = mouse_pressed[0]
         if is_mouse_hovering and is_mouse_left_click:
-            return True
-        else:
-            return False
+            self.is_focus = True
+        elif not is_mouse_left_click:
+            self.is_focus = False
+
+        return self.is_focus
 
     def update(self, mouse_pos, mouse_pressed, mouse_rel):
         if self.is_selecting(mouse_pos, mouse_pressed):
