@@ -3,6 +3,7 @@ import sys
 
 from settings import *
 from pieces import Piece
+from images import load_images
 
 
 pg.init()
@@ -23,14 +24,6 @@ for i in range(8):
         pg.draw.rect(board_surf, color, (x, y, SQUARE_SIZE, SQUARE_SIZE))
 
 
-# set up images
-pieces_image = {}
-for i, color in enumerate("bw"):
-    for j, piece_type in enumerate("BKNpQR"):
-        piece_name = color + piece_type 
-        pieces_image[piece_name] = pg.image.load(f"images/{piece_name}.png").convert_alpha()
-
-
 wK = Piece("w", 0, 0)
 
 
@@ -43,7 +36,7 @@ while True:
 
     screen.fill((0, 0, 0))
     screen.blit(board_surf, (0, 0))
-    screen.blit(wK.image, wK.get_pos())
+    screen.blit(wK.image, wK.get_pixel_pos())
 
     for event in pg.event.get():
         if event.type == pg.QUIT:

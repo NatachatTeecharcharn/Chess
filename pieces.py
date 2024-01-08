@@ -35,7 +35,7 @@ class Piece(pg.sprite.Sprite):
         if self.is_selecting(mouse_pos, mouse_pressed):
             self.rect.x += mouse_rel[0]
             self.rect.y += mouse_rel[1]
-        else:
+        else:  # 
             self.rect.x = ((self.rect.x + 30) // SQUARE_SIZE) * SQUARE_SIZE
             self.rect.y = ((self.rect.y + 30) // SQUARE_SIZE) * SQUARE_SIZE
 
@@ -49,5 +49,25 @@ class Piece(pg.sprite.Sprite):
             elif self.rect.y > BOARD_SIZE - SQUARE_SIZE:
                 self.rect.y = BOARD_SIZE - SQUARE_SIZE
 
-    def get_pos(self): # return x, y coordinate (top left)
+            self.i = self.rect.y // SQUARE_SIZE
+            self.j = self.rect.x // SQUARE_SIZE
+
+    def get_pixel_pos(self): # return x, y coordinate (top left)
         return self.rect.x, self.rect.y
+    
+    def get_board_pos(self):
+        return self.i, self.j
+
+    def get_valid_moves(self):
+        return [(i, j) for i in range(8) for j in range(8)]
+
+
+class Queen(Piece):
+    def __init__(self, color, i, j):
+        super().__init__(color, i, j)
+    
+    def get_valid_moves(self):
+        valid_moves = []
+
+        return valid_moves
+    
