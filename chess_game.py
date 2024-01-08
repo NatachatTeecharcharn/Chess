@@ -11,6 +11,9 @@ class ChessGame:
     def update_turn(self):
         self.turn = (self.turn + 1) % 2
 
+    def move(self, ij1, ij2):
+        self.chess_board.move(ij1, ij2)
+
     # game loop
     def play(self):  
         running = True
@@ -25,6 +28,8 @@ class ChessGame:
             elif command[0] == "move":
                 i1, j1, i2, j2 = map(int, command[1:5])
                 self.board.move((i1, j1), (i2, j2))
+
+                self.update_turn()
 
 
 if __name__ == "__main__":
