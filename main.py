@@ -1,30 +1,12 @@
 import pygame as pg
 import sys
 
+from settings import *
+
 
 pg.init()
-WIDTH = 600
-HEIGHT = 600
 screen = pg.display.set_mode((WIDTH, HEIGHT))
-FPS = 60
 clock = pg.time.Clock()
-
-
-# create board surface
-SQUARE_SIZE = 60
-BOARD_SIZE = SQUARE_SIZE * 8
-LIGHT_SQUARE_COLOR = (200, 200, 200)
-DARK_SQUARE_COLOR = (50, 50, 50)
-board_surf = pg.Surface((BOARD_SIZE, BOARD_SIZE))
-for i in range(8):
-    x = SQUARE_SIZE * i
-    for j in range(8):
-        y = SQUARE_SIZE * j
-        if (i + j) % 2 == 0:
-            color = LIGHT_SQUARE_COLOR
-        else:
-            color = DARK_SQUARE_COLOR
-        pg.draw.rect(board_surf, color, (x, y, SQUARE_SIZE, SQUARE_SIZE))
 
 
 # set up images
@@ -85,20 +67,53 @@ class Piece(pg.sprite.Sprite):
         return self.rect.x, self.rect.y
 
 
-wK = Piece("w", 0, 0)
+class Board:
+    def __init__(self):
+        # create board surface
+        self.surf = pg.Surface((BOARD_SIZE, BOARD_SIZE))
+        for i in range(8):
+            x = SQUARE_SIZE * i
+            for j in range(8):
+                y = SQUARE_SIZE * j
+                if (i + j) % 2 == 0:
+                    color = LIGHT_SQUARE_COLOR
+                else:
+                    color = DARK_SQUARE_COLOR
+                pg.draw.rect(self.surf, color, (x, y, SQUARE_SIZE, SQUARE_SIZE))
+
+        self.board = [
+            ["bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"],
+            ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
+            ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+            ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+            ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+            ["  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "],
+            ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
+            ["wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"]
+        ]
+
+    def render(self, screen):
+        screen.blit(board.surf, (0, 0))
+
+        for i in range(8):
+            row = self.board[i]
+            for j in range(8):
+                piece = row[j]
+                if piece != "  ":
+                    screen.blit(pieces_image[piece], (j * SQUARE_SIZE, i * SQUARE_SIZE))
+
+board = Board()
 
 
+# game loop
 while True:
     mouse_pos = pg.mouse.get_pos()
     mouse_pressed = pg.mouse.get_pressed()
     mouse_rel = pg.mouse.get_rel()
 
-    wK.update(mouse_pos, mouse_pressed, mouse_rel)
-    print(wK.get_pos())
-
     screen.fill((0, 0, 0))
-    screen.blit(board_surf, (0, 0))
-    screen.blit(wK.image, wK.get_pos())
+    board.render(screen)
+
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
