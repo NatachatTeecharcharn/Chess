@@ -26,20 +26,14 @@ for i in range(8):
 # set up images
 PIECE_SIZE = 60
 pieces_image = {}
-for i in range(2):
-    x = PIECE_SIZE * i
-    for j in range(6):
-        y = PIECE_SIZE * j
-
-# test loading an image
-black_queen_image = pg.image.load("ChessPiecesArray.png").convert()
-
+for i, color in enumerate("bw"):
+    for j, piece_type in enumerate("BKNpQR"):
+        piece_name = color + piece_type 
+        pieces_image[piece_name] = pg.image.load(f"images/{piece_name}.png").convert_alpha()
 
 while True:
     screen.fill((0, 0, 0))
     screen.blit(board_surf, (0, 0))
-
-    screen.blit(black_queen_image, (0, 0))
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
